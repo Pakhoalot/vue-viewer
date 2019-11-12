@@ -1,0 +1,19 @@
+@import './components/fai-photo-preview.scss';
+
+.gallery {
+
+}
+
+.gallery .gallery-wrapper {
+  
+}
+
+.gallery .photo-wrapper {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+}
+
+.gallery .photo-wrapper .photo {
+  width: 100%;
+}

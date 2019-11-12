@@ -1,0 +1,131 @@
+@import './viewer.scss';
+
+.jz-photo-preview {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  z-index: 1500;
+}
+
+.jz-photo-preview .scroll-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.jz-photo-preview .mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .5;
+  transform: translateZ(0);
+  box-sizing: border-box;
+}
+.jz-photo-preview-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.jz-photo-preview-wrapper .photo-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+.jz-photo-preview .right-top-bar {
+  position: fixed;
+  right: 33px;
+  top: 33px;
+}
+
+.jz-photo-preview  .right-top-bar .button-group {
+
+}
+.jz-photo-preview .right-top-bar .button-group .button-wrapper{
+  display: inline-block;
+}
+.jz-photo-preview .right-top-bar .button-group .button-wrapper .button{
+  width: 44px;
+  height: 44px;
+}
+
+.jz-photo-preview .right-top-bar .button-group .button-wrapper .close-button{
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background: #000;
+  border: white 1px solid;
+  opacity:0.2;
+  border-radius:50%;
+}
+
+.jz-photo-preview .tool-bar-container{
+  position: fixed;
+  bottom: 32px;
+  width: 100%;
+}
+.jz-photo-preview .tool-bar{
+  height: 46px;
+  width: 271px;
+  background:#2A2A2A;
+  opacity:0.5;
+  border-radius:4px;
+
+  margin: 0 auto;
+}
+.jz-photo-preview .tool-bar .tool-bar-wrapper {
+  padding: 0 30px;
+}
+.jz-photo-preview .tool-bar .button-group {
+  display: flex;
+  justify-content: space-between;
+}
+.jz-photo-preview .tool-bar .button-wrapper {
+  display: inline-block;
+}
+
+.jz-photo-preview .tool-bar .button {
+  width: 46px;
+  height: 46px;
+  cursor: pointer;
+}
+
+.jz-photo-preview .tool-bar .button.active,
+.jz-photo-preview .tool-bar .button:hover {
+  background: #3B3B3B;
+}
+
+.jz-photo-preview .tool-bar .button.disabled {
+  cursor: default;  
+}
+
+.jz-photo-preview .close-button {
+
+}
+.jz-photo-preview .left-button {
+
+}
+.jz-photo-preview .right-button {
+
+}
+.jz-photo-preview .status-button {
+
+}
+.jz-photo-preview .download-button {
+
+}
+
+
