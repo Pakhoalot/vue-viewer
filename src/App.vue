@@ -1,18 +1,18 @@
 <template>
     <div class="app">
      <h1>fai-photo-preview</h1>
-     <div class="gallery">
-       <div class="gallery-wrapper">
-         <div class="photo-wrapper"
-          v-for="(photo, index) in photos" 
-          :key="index"
-          @click="() => previewOpen(index)">
-           <img class="photo" :src="photo"/>
-         </div>
-       </div>
-     </div>
-     <photo-preview 
-     ></photo-preview>
+     <photo-preview>
+      <div class="gallery">
+        <div class="gallery-wrapper">
+          <div class="photo-wrapper"
+            v-for="(photo, index) in photos" 
+            :key="index"
+            >
+            <img class="photo" :src="photo"/>
+          </div>
+        </div>
+      </div>
+     </photo-preview>
     </div>
 </template>
 
@@ -36,25 +36,11 @@ export default {
     const slides = srcs.map(_ => ({ src: _ }))
     return {
       photos,
-      isPreviewOpen: false,
       slides,
     }
   },
   methods: {
-    onNextPhoto() {
-      
-    },
-    onPrevPhoto() {
 
-    },
-    previewOpen(index) {
-      this.isPreviewOpen = true;
-      const photoPreview = this.$refs.photoPreview;
-      photoPreview.goto(index)
-    },
-    onClose() {
-      this.isPreviewOpen = false;
-    }
   },
 }
 

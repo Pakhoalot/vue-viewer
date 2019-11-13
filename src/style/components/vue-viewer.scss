@@ -1,24 +1,8 @@
 @import './viewer.scss';
 
 .jz-photo-preview {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  overflow: hidden;
-  z-index: 1500;
-}
 
-.jz-photo-preview .scroll-wrapper {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
-
 .jz-photo-preview .mask {
   position: absolute;
   left: 0;
@@ -29,21 +13,6 @@
   opacity: .5;
   transform: translateZ(0);
   box-sizing: border-box;
-}
-.jz-photo-preview-wrapper {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-.jz-photo-preview-wrapper .photo-wrapper {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  overflow: hidden;
 }
 .jz-photo-preview .right-top-bar {
   position: fixed;
