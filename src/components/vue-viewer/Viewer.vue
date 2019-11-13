@@ -72,10 +72,6 @@ export default {
     const wrapper = this.$refs.photosWrapper;
 
     const event = {
-      show: () => {
-        console.log('haha')
-        this.open = true;
-      }
     };
     this.viewer = new Viewer(wrapper, {
       container,
@@ -85,13 +81,13 @@ export default {
       toolbar: {
         prev: true,
         next: true,
-        download: true,
         toggleZoom: true,
+        download: true,
       },
       loop: false,
       tooltip: false,
       zIndex: 0,
-      backdrop: true,  
+      backdrop: true,
       ...event
     });
   },

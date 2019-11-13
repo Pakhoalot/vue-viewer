@@ -181,6 +181,32 @@
       
   }
 
+  &-top-right-bar {
+    position: fixed;
+    right: 33px;
+    top: 33px;
+
+    & button {
+      width: 44px;
+      height: 44px;
+      border-radius: 22px;
+      background: #000;
+      border: white 1px solid;
+      opacity:0.2;
+      border-radius:50%;
+    }
+  }
+
+  &-top-right-bar &-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: #000;
+    border: white 1px solid;
+    opacity:0.2;
+    border-radius:50%;
+  }
+
   &-tooltip {
     background-color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;

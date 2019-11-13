@@ -76,6 +76,7 @@ class Viewer {
     this.viewing = false;
     this.wheeling = false;
     this.zooming = false;
+    this.zoomMode = 'fit'; //fit为适应界面, origin 为原始大小
     this.init();
   }
 
@@ -185,7 +186,7 @@ class Viewer {
     const navbar = viewer.querySelector(`.${NAMESPACE}-navbar`);
     const button = viewer.querySelector(`.${NAMESPACE}-button`);
     const canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
-
+    const topRight = viewer.querySelector(`.${NAMESPACE}-top-right-bar`)
     this.parent = parent;
     this.viewer = viewer;
     this.title = title;
@@ -202,7 +203,7 @@ class Viewer {
       ? options.title[0]
       : options.title));
     addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
-    toggleClass(button, CLASS_HIDE, !options.button);
+    toggleClass(topRight, CLASS_HIDE, !options.button);
 
     if (options.backdrop) {
       addClass(viewer, `${NAMESPACE}-backdrop`);
@@ -268,6 +269,9 @@ class Viewer {
           addClass(item, `${NAMESPACE}-${size}`);
         } else if (name === 'play') {
           addClass(item, `${NAMESPACE}-large`);
+        } else if (name === 'toggle-zoom') {
+          addClass(item, `${NAMESPACE}-${this.zoomMode}`);
+          this.toggleZoomButton = item;
         }
 
         if (isFunction(click)) {

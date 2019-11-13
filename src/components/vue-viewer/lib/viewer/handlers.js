@@ -109,8 +109,7 @@ export default {
         this.scaleY(-imageData.scaleY || -1);
         break;
       case 'toggle-zoom':
-        //! debug
-        console.log('toggle-zoom fire');
+        this.toggle();
         break;
       case 'download':
         //! debug

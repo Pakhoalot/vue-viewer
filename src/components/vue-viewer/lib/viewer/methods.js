@@ -854,10 +854,16 @@ export default {
   toggle() {
     if (this.imageData.ratio === 1) {
       this.zoomTo(this.initialImageData.ratio, true);
+      if(this.toggleZoomButton) {
+        addClass(this.toggleZoomButton, `${NAMESPACE}-fit`);
+      }
     } else {
       this.zoomTo(1, true);
+      if(this.toggleZoomButton) {
+        removeClass(this.toggleZoomButton, `${NAMESPACE}-fit`);
+      }
     }
-
+    
     return this;
   },
 
