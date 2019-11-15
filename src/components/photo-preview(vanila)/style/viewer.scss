@@ -1,0 +1,365 @@
+.viewer {
+  
+  &-image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  &-image-mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transition: all .2s ease-out;
+  }
+
+  &-image-mask:hover {
+    background: rgba($color: #000000, $alpha: .5);
+  }
+  &-container {
+    bottom: 0;
+    direction: ltr;
+    font-size: 0;
+    left: 0;
+    line-height: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    -webkit-tap-highlight-color: transparent;
+    top: 0;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+
+    &::selection,
+    & *::selection {
+      background-color: transparent;
+    }
+
+    & img {
+      display: block;
+      height: auto;
+      max-height: none !important;
+      max-width: none !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
+      width: 100%;
+    }
+  }
+
+  &-canvas {
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    & > img {
+      height: auto;
+      margin: 15px auto;
+      max-width: 90% !important;
+      width: auto;
+    }
+  }
+
+  &-footer {
+    position: fixed;
+    bottom: 32px;
+    width: 100%;
+  }
+
+  &-navbar {
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  &-list {
+    box-sizing: content-box;
+    height: 50px;
+    margin: 0;
+    overflow: hidden;
+    padding: 1px 0;
+
+    & > li {
+      color: transparent;
+      cursor: pointer;
+      float: left;
+      font-size: 0;
+      height: 50px;
+      line-height: 0;
+      opacity: 0.5;
+      overflow: hidden;
+      transition: opacity 0.15s;
+      width: 30px;
+
+      &:hover {
+        opacity: 0.75;
+      }
+
+      & + li {
+        margin-left: 1px;
+      }
+    }
+
+    & > .viewer-loading {
+      position: relative;
+
+      &::after {
+        border-width: 2px;
+        height: 20px;
+        margin-left: -10px;
+        margin-top: -10px;
+        width: 20px;
+      }
+    }
+
+    & > .viewer-active {
+      &,
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  &-player {
+    background-color: #000;
+    bottom: 0;
+    cursor: none;
+    display: none;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    & > img {
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  &-toolbar {
+    height: 46px;
+    width: 271px;
+    background:#2A2A2A;
+    opacity:0.5;
+    border-radius:4px;
+    margin: 0 auto;
+
+    .button-group {
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+
+      .button-wrapper {
+        display: inline-block;
+        
+        .button {
+          display: flex;
+          width: 46px;
+          height: 46px;
+          cursor: pointer;
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+          .viewer-svg {
+            width: 23px;
+            height: 23px;
+            fill: #fff;
+            stroke: #fff;
+          }
+          &.active,
+          &:hover {
+            background: #3B3B3B;
+            
+          }
+
+        &.disabled {
+          cursor: default;
+          &:hover {
+            background: none;
+          }
+          .viewer-svg {
+            width: 23px;
+            height: 23px;
+            fill: #8E8E8E;
+            stroke: #8E8E8E;
+            
+          }
+        }
+        }
+
+        
+      }
+
+    }
+  }
+
+  &-toggle-zoom.viewer-fit .viewer-svg{
+    &:first-child {
+      display: none;
+    }
+    &:last-child {
+      display: block;
+    }
+  }
+
+  &-toggle-zoom .viewer-svg {
+    &:first-child {
+      display: block;
+    }
+    &:last-child {
+      display: none;
+    }
+  }
+
+  &-tooltip {
+    background-color: rgba(68,68,68, 0.6);
+    border-radius: 16px;
+    color: rgba($color: #fff, $alpha: 0.6);
+    display: none;
+    font-size: 20px;
+    height: 30px;
+    left: 50%;
+    line-height: 31px;
+    margin-left: -40px;
+    margin-top: -15px;
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    width: 80px;
+  }
+
+  &-title {
+    color: #ccc;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1;
+    margin: 0 5% 5px;
+    max-width: 90%;
+    opacity: 0.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &-top-right-bar {
+    position: fixed;
+    right: 33px;
+    top: 33px;
+    
+  }
+  &-button {
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+  }
+
+  &-close {
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    background: #000;
+    border: white 1px solid;
+    opacity:0.2;
+    border-radius:50%;
+  }
+  
+
+  &-fixed {
+    position: fixed;
+  }
+
+  &-open {
+    overflow: hidden;
+  }
+
+  &-show {
+    display: block;
+  }
+
+  &-hide {
+    display: none;
+  }
+
+  &-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &-invisible {
+    visibility: hidden;
+  }
+
+  &-move {
+    cursor: move;
+    cursor: grab;
+  }
+
+  &-fade {
+    opacity: 0;
+  }
+
+  &-in {
+    opacity: 1;
+  }
+
+  &-transition {
+    transition: all .2s;
+  }
+
+  @keyframes viewer-spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &-loading {
+    &::after {
+      animation: viewer-spinner 1s linear infinite;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-left-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+      height: 40px;
+      left: 50%;
+      margin-left: -20px;
+      margin-top: -20px;
+      position: absolute;
+      top: 50%;
+      width: 40px;
+      z-index: 1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    &-hide-xs-down {
+      display: none;
+    }
+  }
+
+  @media (max-width: 991px) {
+    &-hide-sm-down {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1199px) {
+    &-hide-md-down {
+      display: none;
+    }
+  }
+}
+
+
+svg {
+  pointer-events: none;
+}
