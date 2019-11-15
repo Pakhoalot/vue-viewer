@@ -1,16 +1,19 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const copyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
 module.exports = {
-  entry: path.resolve(__dirname, '../src/main.js'),
+  entry: path.resolve(__dirname, '../src/components/vue-viewer/index.js'),
   output: {
-    path: path.resolve(__dirname, '../demo'),
-    filename: 'project.bundle.js',
+    path: path.resolve(__dirname, '../dist/photo-preview'),
+    filename: 'vue-viewer.js',
+    library: 'vueViewer',
+    libraryTarget: 'global'
   },
   module: {
     rules: [
-      {
-        test: /\.vue$/,
+      {        test: /\.vue$/,
         loader: 'vue-loader'
       },
       {
@@ -41,11 +44,8 @@ module.exports = {
   plugins: [
     // 请确保引入这个插件！
     new VueLoaderPlugin(),
-    new copyWebpackPlugin([{
-      from: path.resolve(__dirname, '../public'),    //要打包的静态资源目录地址，这里的__dirname是指项目目录下，是node的一种语法，可以直接定位到本机的项目目录中
-      to: './'  //要打包到的文件夹路径，跟随output配置中的目录。所以不需要再自己加__dirname
-  }])
+    // new CleanWebpackPlugin(),
   ],
   
-  mode: 'dev'
+  mode: 'production'
 }

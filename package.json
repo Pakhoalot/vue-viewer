@@ -1,8 +1,16 @@
 {
   "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "babel": "^6.23.0",
+    "change-case": "^3.1.0",
+    "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.4",
+    "create-banner": "^1.0.0",
     "css-loader": "^3.1.0",
     "node-sass": "^4.12.0",
+    "rollup": "^1.27.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-vue": "^5.1.2",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "vue-loader": "^15.7.1",
@@ -11,9 +19,11 @@
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
   },
+  "main": "dist/vue-viewer/vue-viewer.js",
   "scripts": {
     "build": "webpack --config ./config/webpack.build.js",
-    "dev": "webpack-dev-server --progress --colors --config ./config/webpack.dev.js"
+    "dev": "webpack-dev-server --progress --colors --config ./config/webpack.dev.js",
+    "lib-build": "rollup -c"
   },
   "dependencies": {
     "vue": "^2.6.10"

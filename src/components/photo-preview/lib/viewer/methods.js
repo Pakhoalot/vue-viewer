@@ -202,7 +202,6 @@ export default {
       this.index = index;
       return this.show();
     }
-
     if (this.viewing) {
       this.viewing.abort();
     }
@@ -323,6 +322,7 @@ export default {
    */
   prev(loop = false) {
     let index = this.index - 1;
+    if(loop == false && index < 0) return this;
 
     if (index < 0) {
       index = loop ? this.length - 1 : 0;
@@ -341,6 +341,7 @@ export default {
   next(loop = false) {
     const maxIndex = this.length - 1;
     let index = this.index + 1;
+    if(loop == false && index > maxIndex) return this;
 
     if (index > maxIndex) {
       index = loop ? 0 : maxIndex;

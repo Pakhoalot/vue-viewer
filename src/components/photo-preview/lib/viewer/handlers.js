@@ -112,8 +112,6 @@ export default {
         this.toggle();
         break;
       case 'download':
-        //! debug
-        console.log('download fire');
         break;
       default:
         if (this.played) {

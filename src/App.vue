@@ -1,7 +1,7 @@
 <template>
     <div class="app">
      <h1>fai-photo-preview</h1>
-     <photo-preview>
+     <photo-preview ref="photoPreview">
       <div class="gallery">
         <div class="gallery-wrapper">
           <div class="photo-wrapper"
@@ -13,6 +13,9 @@
         </div>
       </div>
      </photo-preview>
+     <div>
+       <button @click="addPhoto">添加图片</button>
+     </div>
     </div>
 </template>
 
@@ -36,12 +39,17 @@ export default {
     const slides = srcs.map(_ => ({ src: _ }))
     return {
       photos,
-      slides,
     }
   },
   methods: {
-
+    addPhoto() {
+      this.photos.push(`img/1.jpg`);
+      this.$nextTick(() => {
+        this.$refs.photoPreview.initViewer();
+      })
+    }
   },
+
 }
 
 </script>

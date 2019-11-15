@@ -23,6 +23,7 @@ import {
 } from './constants';
 import {
   addClass,
+  hasClass,
   addListener,
   assign,
   dispatchEvent,
@@ -91,13 +92,27 @@ class Viewer {
 
     const isImg = element.tagName.toLowerCase() === 'img';
     const images = [];
-
+    const imageWrapperMap = new Map();
+    const addWrapper = (image) => {
+      const imageParent = image.parentNode;
+      const imageWrapper = document.createElement('div');
+      addClass(imageWrapper, `${NAMESPACE}-image-wrapper`);
+      const mask = document.createElement('div');
+      addClass(mask, `${NAMESPACE}-image-mask`);
+      imageWrapper.appendChild(mask);
+      imageWrapper.appendChild(image);
+      imageParent.appendChild(imageWrapper);
+      addClass(image, `${NAMESPACE}-image`);
+      imageWrapperMap.set(image, imageWrapper);
+    }
     forEach(isImg ? [element] : element.querySelectorAll('img'), (image) => {
       if (isFunction(options.filter)) {
         if (options.filter.call(this, image)) {
+          addWrapper(image)
           images.push(image);
         }
       } else {
+        addWrapper(image)
         images.push(image);
       }
     });
@@ -142,31 +157,84 @@ class Viewer {
 
       this.initializing = {
         abort() {
-          forEach(images, (image) => {
+          forEach(image, (image) => {
             if (!image.complete) {
-              removeListener(image, EVENT_LOAD, progress);
+              removeListener(imageWrapperMap.get(image), EVENT_LOAD, progress);
             }
           });
         },
       };
 
-      forEach(images, (image) => {
+      forEach(imageWrappers, (image) => {
         if (image.complete) {
           progress();
         } else {
-          addListener(image, EVENT_LOAD, progress, {
+          addListener(imageWrapperMap.get(image), EVENT_LOAD, progress, {
             once: true,
           });
         }
       });
     } else {
       addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
-        if (target.tagName.toLowerCase() === 'img'
-          && (!isFunction(options.filter) || options.filter.call(this, target))) {
-          this.view(this.images.indexOf(target));
+        const image = target.nextSibling;
+        if (hasClass(image, `${NAMESPACE}-image`)
+          && (!isFunction(options.filter) || options.filter.call(this, image))) {
+          this.view(this.images.indexOf(image));
         }
       }));
     }
+    //origin
+
+    // if (options.inline) {
+    //   let count = 0;
+    //   const progress = () => {
+    //     count += 1;
+
+    //     if (count === this.length) {
+    //       let timeout;
+
+    //       this.initializing = false;
+    //       this.delaying = {
+    //         abort: () => {
+    //           clearTimeout(timeout);
+    //         },
+    //       };
+
+    //       // build asynchronously to keep `this.viewer` is accessible in `ready` event handler.
+    //       timeout = setTimeout(() => {
+    //         this.delaying = false;
+    //         this.build();
+    //       }, 0);
+    //     }
+    //   };
+
+    //   this.initializing = {
+    //     abort() {
+    //       forEach(images, (image) => {
+    //         if (!image.complete) {
+    //           removeListener(image, EVENT_LOAD, progress);
+    //         }
+    //       });
+    //     },
+    //   };
+
+    //   forEach(images, (image) => {
+    //     if (image.complete) {
+    //       progress();
+    //     } else {
+    //       addListener(image, EVENT_LOAD, progress, {
+    //         once: true,
+    //       });
+    //     }
+    //   });
+    // } else {
+    //   addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
+    //     if (target.tagName.toLowerCase() === 'img'
+    //       && (!isFunction(options.filter) || options.filter.call(this, target))) {
+    //       this.view(this.images.indexOf(target));
+    //     }
+    //   }));
+    // }
   }
 
   build() {
@@ -218,72 +286,6 @@ class Viewer {
       options.className.split(REGEXP_SPACES).forEach((className) => {
         addClass(viewer, className);
       });
-    }
-
-    if (options.toolbar) {
-      const list = document.createElement('div');
-      addClass(list, `button-group`)
-      const custom = isPlainObject(options.toolbar);
-      const zoomButtons = BUTTONS.slice(0, 3);
-      const rotateButtons = BUTTONS.slice(7, 9);
-      const scaleButtons = BUTTONS.slice(9);
-
-      if (!custom) {
-        addClass(toolbar, getResponsiveClass(options.toolbar));
-      }
-
-      forEach(custom ? options.toolbar : BUTTONS, (value, index) => {
-        const deep = custom && isPlainObject(value);
-        const name = custom ? hyphenate(index) : value;
-        const show = deep && !isUndefined(value.show) ? value.show : value;
-
-        if (
-          !show
-          || (!options.zoomable && zoomButtons.indexOf(name) !== -1)
-          || (!options.rotatable && rotateButtons.indexOf(name) !== -1)
-          || (!options.scalable && scaleButtons.indexOf(name) !== -1)
-        ) {
-          return;
-        }
-
-        const size = deep && !isUndefined(value.size) ? value.size : value;
-        const click = deep && !isUndefined(value.click) ? value.click : value;
-        const item = document.createElement('div');
-        
-        const itemWrapper = document.createElement('div');
-        itemWrapper.appendChild(item);
-        addClass(itemWrapper, `button-wrapper`)
-        item.setAttribute('role', 'button');
-        addClass(item, `button`);
-        addClass(item, `${NAMESPACE}-${name}`);
-
-        if (!isFunction(click)) {
-          setData(item, DATA_ACTION, name);
-        }
-
-        if (isNumber(show)) {
-          addClass(item, getResponsiveClass(show));
-        }
-
-        if (['small', 'large'].indexOf(size) !== -1) {
-          addClass(item, `${NAMESPACE}-${size}`);
-        } else if (name === 'play') {
-          addClass(item, `${NAMESPACE}-large`);
-        } else if (name === 'toggle-zoom') {
-          addClass(item, `${NAMESPACE}-${this.zoomMode}`);
-          this.toggleZoomButton = item;
-        }
-
-        if (isFunction(click)) {
-          addListener(item, EVENT_CLICK, click);
-        }
-
-        list.appendChild(itemWrapper);
-      });
-
-      toolbar.appendChild(list);
-    } else {
-      addClass(toolbar, CLASS_HIDE);
     }
 
     if (!options.rotatable) {

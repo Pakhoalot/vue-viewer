@@ -3,6 +3,7 @@
 .jz-photo-preview {
 
 }
+
 .jz-photo-preview .mask {
   position: absolute;
   left: 0;
@@ -13,6 +14,7 @@
   opacity: .5;
   transform: translateZ(0);
   box-sizing: border-box;
+  transition: all 0.3s ease-in;
 }
 .jz-photo-preview .right-top-bar {
   position: fixed;
@@ -52,7 +54,6 @@
   background:#2A2A2A;
   opacity:0.5;
   border-radius:4px;
-
   margin: 0 auto;
 }
 .jz-photo-preview .tool-bar .tool-bar-wrapper {
@@ -67,6 +68,7 @@
 }
 
 .jz-photo-preview .tool-bar .button {
+  display: block;
   width: 46px;
   height: 46px;
   cursor: pointer;
@@ -97,4 +99,23 @@
 
 }
 
+.jz-photo-preview .startShow .mask,
+.jz-photo-preview .startShow .panel-container {
+  display: block;
+  opacity: 0;
+}
 
+.jz-photo-preview .endShow .mask,
+.jz-photo-preview .endShow .panel-container {
+
+}
+
+.jz-photo-preview .startHide .mask,
+.jz-photo-preview .startHide .panel-container {
+  opacity: 0;
+}
+
+.jz-photo-preview .endHide .mask,
+.jz-photo-preview .endHide .panel-container {
+  display: none;
+}
