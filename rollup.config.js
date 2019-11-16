@@ -1,8 +1,8 @@
 const babel = require('rollup-plugin-babel');
 const VuePlugin = require('rollup-plugin-vue');
-const name = 'vue-viewer';
+const name = 'qzViewer';
 module.exports = {
-  input: 'src/components/vue-viewer/index.js',
+  input: 'src/components/photo-preview(vanila)/index.js',
   output: [
     // {
     //   name,
@@ -21,12 +21,16 @@ module.exports = {
     // },
     {
       format: 'iife',
-      file: 'dist/library.js'
+      file: `dist/${name}.js`,
+      name: name,
+      globals: {
+        WXApp: 'WXApp'
+      }
     },
   ],
   external: ['vue'],
   plugins: [
     VuePlugin({}),
-    // babel(),
+    babel(),
   ],
 };

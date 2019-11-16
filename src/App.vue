@@ -1,7 +1,7 @@
 <template>
     <div class="app">
       <h1>fai-photo-preview(vanila)</h1>
-      <viewer ref="viewer">
+      <viewer :model="photos">
         <div class="gallery" ref="gallery">
           <div class="gallery-wrapper">
             <div class="photo-wrapper"
@@ -65,9 +65,7 @@ export default {
       this.photos.push(`img/1.jpg`);
       this.$nextTick(() => {
         this.$refs.photoPreview.initViewer();
-        this.$refs.viewer.forceInitViewer();
       })
-      
     }
   },
 

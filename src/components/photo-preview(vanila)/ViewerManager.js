@@ -1,4 +1,4 @@
-import Viewer from './viewer';
+import Viewer from './viewer/index';
 
 /**
  * viewer管理类, 提供管理单例统一管理所有viewer;
@@ -80,7 +80,7 @@ class ViewerManager {
     else viewer = this.getViewer(id);
     const options = viewer.v_options;
     this.viewers = this.viewers.filter(_=>_.id != viewer.id);
-    viewer.destroy();
+    this.destroyViewer(viewer);
     viewer = this.create(options);
     this.idViewerMap.set(viewer.id, viewer);
     this.viewers.push(viewer);

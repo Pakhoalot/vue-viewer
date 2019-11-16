@@ -214,7 +214,6 @@ export default {
     } else if (isFunction(options.url)) {
       url = options.url.call(this, targetImage);
     }
-    console.log(url)
     const alt = targetImage.getAttribute('alt');
     const image = document.createElement('img');
 
