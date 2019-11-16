@@ -66,7 +66,6 @@ export default {
     this.close();
     this.unbind();
     addClass(this.viewer, CLASS_HIDE);
-    this.resetList();
     this.resetImage();
     this.hiding = false;
 

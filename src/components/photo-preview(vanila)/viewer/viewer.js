@@ -201,7 +201,6 @@ class Viewer {
     const viewer = template.querySelector(`.${NAMESPACE}-container`);
     const title = viewer.querySelector(`.${NAMESPACE}-title`);
     const toolbar = viewer.querySelector(`.${NAMESPACE}-toolbar`);
-    const navbar = viewer.querySelector(`.${NAMESPACE}-navbar`);
     const button = viewer.querySelector(`.${NAMESPACE}-button`);
     const canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
     const topRight = viewer.querySelector(`.${NAMESPACE}-top-right-bar`)
@@ -209,18 +208,15 @@ class Viewer {
     this.viewer = viewer;
     this.title = title;
     this.toolbar = toolbar;
-    this.navbar = navbar;
     this.button = button;
     this.canvas = canvas;
     this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
     this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
     this.player = viewer.querySelector(`.${NAMESPACE}-player`);
-    this.list = viewer.querySelector(`.${NAMESPACE}-list`);
 
     addClass(title, !options.title ? CLASS_HIDE : getResponsiveClass(Array.isArray(options.title)
       ? options.title[0]
       : options.title));
-    addClass(navbar, !options.navbar ? CLASS_HIDE : getResponsiveClass(options.navbar));
     toggleClass(topRight, CLASS_HIDE, !options.button);
 
     if (options.backdrop) {

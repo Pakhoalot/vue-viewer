@@ -27,7 +27,6 @@ import {
   dispatchEvent,
   escapeHTMLEntities,
   forEach,
-  getData,
   getOffset,
   getPointersCenter,
   hasClass,
@@ -37,7 +36,7 @@ import {
   removeClass,
   removeListener,
   setStyle,
-  toggleClass,
+  isString,
 } from './utilities';
 
 export default {
@@ -207,10 +206,16 @@ export default {
       title,
       canvas,
     } = this;
-    const item = this.items[index];
-    const img = item.querySelector('img');
-    const url = getData(img, 'originalUrl');
-    const alt = img.getAttribute('alt');
+
+    const targetImage = this.images[index];
+    let url;
+    if (isString(options.url)) {
+      url = targetImage.getAttribute(options.url);
+    } else if (isFunction(options.url)) {
+      url = options.url.call(this, targetImage);
+    }
+    console.log(url)
+    const alt = targetImage.getAttribute('alt');
     const image = document.createElement('img');
 
     image.src = url;
@@ -231,8 +236,6 @@ export default {
     }
 
     this.image = image;
-    removeClass(this.items[this.index], CLASS_ACTIVE);
-    addClass(item, CLASS_ACTIVE);
     this.viewed = false;
     this.index = index;
     this.imageData = {};
@@ -245,8 +248,6 @@ export default {
     canvas.innerHTML = '';
     canvas.appendChild(image);
 
-    // Center current item
-    this.renderList();
 
     // Clear title
     title.innerHTML = '';
@@ -641,7 +642,6 @@ export default {
 
     this.initContainer();
     this.viewerData = assign({}, this.containerData);
-    this.renderList();
 
     if (this.viewed) {
       this.initImage(() => {
@@ -691,7 +691,6 @@ export default {
 
     this.viewerData = assign({}, this.parentData);
     this.renderViewer();
-    this.renderList();
 
     if (this.viewed) {
       this.initImage(() => {
@@ -821,24 +820,9 @@ export default {
     if (this.ready) {
       const indexes = [];
 
-      forEach(this.items, (item, i) => {
-        const img = item.querySelector('img');
-        const image = images[i];
-
-        if (image && img) {
-          if (image.src !== img.src) {
-            indexes.push(i);
-          }
-        } else {
-          indexes.push(i);
-        }
-      });
-
       setStyle(this.list, {
         width: 'auto',
       });
-
-      this.initList();
 
       if (this.isShown) {
         if (this.length) {
@@ -848,8 +832,6 @@ export default {
             if (index >= 0) {
               this.viewed = false;
               this.view(Math.max(this.index - (index + 1), 0));
-            } else {
-              addClass(this.items[this.index], CLASS_ACTIVE);
             }
           }
         } else {

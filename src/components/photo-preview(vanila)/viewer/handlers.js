@@ -420,7 +420,6 @@ export default {
     this.initContainer();
     this.initViewer();
     this.renderViewer();
-    this.renderList();
 
     if (this.viewed) {
       this.initImage(() => {

@@ -25,7 +25,6 @@ export default {
   render() {
     this.initContainer();
     this.initViewer();
-    this.initList();
     this.renderViewer();
   },
 
@@ -62,93 +61,6 @@ export default {
     }
   },
 
-  initList() {
-    const { element, options, list } = this;
-    const items = [];
-
-    // initList may be called in this.update, so should keep idempotent
-    list.innerHTML = '';
-
-    forEach(this.images, (image, index) => {
-      const { src } = image;
-      const alt = image.alt || getImageNameFromURL(src);
-      let { url } = options;
-
-      if (isString(url)) {
-        url = image.getAttribute(url);
-      } else if (isFunction(url)) {
-        url = url.call(this, image);
-      }
-
-      if (src || url) {
-        const item = document.createElement('li');
-        const img = document.createElement('img');
-
-        img.src = src || url;
-        img.alt = alt;
-        img.setAttribute('data-index', index);
-        img.setAttribute('data-original-url', url || src);
-        img.setAttribute('data-viewer-action', 'view');
-        img.setAttribute('role', 'button');
-        item.appendChild(img);
-        list.appendChild(item);
-        items.push(item);
-      }
-    });
-
-    this.items = items;
-
-    forEach(items, (item) => {
-      const image = item.firstElementChild;
-
-      setData(image, 'filled', true);
-
-      if (options.loading) {
-        addClass(item, CLASS_LOADING);
-      }
-
-      addListener(image, EVENT_LOAD, (event) => {
-        if (options.loading) {
-          removeClass(item, CLASS_LOADING);
-        }
-
-        this.loadImage(event);
-      }, {
-        once: true,
-      });
-    });
-
-    if (options.transition) {
-      addListener(element, EVENT_VIEWED, () => {
-        addClass(list, CLASS_TRANSITION);
-      }, {
-        once: true,
-      });
-    }
-  },
-
-  renderList(index) {
-    const i = index || this.index;
-    const width = this.items[i].offsetWidth || 30;
-    const outerWidth = width + 1; // 1 pixel of `margin-left` width
-
-    // Place the active item in the center of the screen
-    setStyle(this.list, assign({
-      width: outerWidth * this.length,
-    }, getTransforms({
-      translateX: ((this.viewerData.width - width) / 2) - (outerWidth * i),
-    })));
-  },
-
-  resetList() {
-    const { list } = this;
-
-    list.innerHTML = '';
-    removeClass(list, CLASS_TRANSITION);
-    setStyle(list, getTransforms({
-      translateX: 0,
-    }));
-  },
 
   initImage(done) {
     const { options, image, viewerData } = this;
