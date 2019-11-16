@@ -1,16 +1,18 @@
 <template>
     <div class="app">
       <h1>fai-photo-preview(vanila)</h1>
-      <div class="gallery" ref="gallery">
-        <div class="gallery-wrapper">
-          <div class="photo-wrapper"
-            v-for="(photo, index) in photos" 
-            :key="index"
-            >
-            <img class="photo" :src="photo"/>
+      <viewer ref="viewer">
+        <div class="gallery" ref="gallery">
+          <div class="gallery-wrapper">
+            <div class="photo-wrapper"
+              v-for="(photo, index) in photos" 
+              :key="index"
+              >
+              <img class="photo" :src="photo"/>
+            </div>
           </div>
         </div>
-      </div>
+      </viewer>
      <div>
        <button @click="addPhoto">添加图片</button>
      </div>
@@ -30,8 +32,6 @@
      <div>
        <button @click="addPhoto">添加图片</button>
      </div>
-
-     
     </div>
 </template>
 
@@ -39,16 +39,18 @@
 <script>
 import Viewer from './components/photo-preview';
 import v from './components/photo-preview(vanila)';
+import ViewerWrapper from './components/photo-preview(vanila)/ViewerWrapper';
 
 export default {
   components: {
     'photo-preview': Viewer,
+    'viewer': ViewerWrapper,
   },
   data() {
     const srcs = (() => {
       const result = []
       for(let i = 1; i < 10; i++){
-        result.push(`img/${i}.jpg`); 
+        result.push(`img/${i}.${i == 6 || i == 9? 'png': 'jpg'}`); 
       }
       return result;
     })();
@@ -58,17 +60,14 @@ export default {
       photos,
     }
   },
-  mounted() {
-    this._viewer = v.createViewer({ element: this.$refs.gallery, container: document.body });
-  },
   methods: {
     addPhoto() {
       this.photos.push(`img/1.jpg`);
       this.$nextTick(() => {
         this.$refs.photoPreview.initViewer();
+        this.$refs.viewer.forceInitViewer();
       })
-      v.initViewerAsync(this._viewer.id)
-        .then((res) => this._viewer = res);
+      
     }
   },
 

@@ -506,6 +506,12 @@ export default {
 
     this.zoom(-delta * ratio, true, event);
   },
+  /**
+   * 下载当前图片
+   *
+   * @param {*} image
+   * @returns
+   */
   download(image) {
     if(!image || !image.src) return;
     const src = image.src;
