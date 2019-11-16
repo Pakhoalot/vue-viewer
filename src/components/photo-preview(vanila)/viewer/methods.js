@@ -138,11 +138,6 @@ export default {
 
     this.hiding = true;
 
-    if (this.played) {
-      this.stop();
-    } else if (this.viewing) {
-      this.viewing.abort();
-    }
 
     const { viewer } = this;
 
@@ -193,7 +188,7 @@ export default {
   view(index = this.options.initialViewIndex) {
     index = Number(index) || 0;
 
-    if (this.hiding || this.played || index < 0 || index >= this.length
+    if (this.hiding || index < 0 || index >= this.length
       || (this.viewed && index === this.index)) {
       return this;
     }
@@ -231,7 +226,7 @@ export default {
       originalImage: this.images[index],
       index,
       image,
-    }) === false || !this.isShown || this.hiding || this.played) {
+    }) === false || !this.isShown || this.hiding) {
       return this;
     }
 
@@ -382,7 +377,7 @@ export default {
     x = Number(x);
     y = Number(y);
 
-    if (this.viewed && !this.played && this.options.movable) {
+    if (this.viewed && this.options.movable) {
       let changed = false;
 
       if (isNumber(x)) {
@@ -452,7 +447,7 @@ export default {
 
     ratio = Math.max(0, ratio);
 
-    if (isNumber(ratio) && this.viewed && !this.played && (_zoomable || options.zoomable)) {
+    if (isNumber(ratio) && this.viewed && (_zoomable || options.zoomable)) {
       if (!_zoomable) {
         const minZoomRatio = Math.max(0.01, options.minZoomRatio);
         const maxZoomRatio = Math.min(100, options.maxZoomRatio);
@@ -550,7 +545,7 @@ export default {
 
     degree = Number(degree);
 
-    if (isNumber(degree) && this.viewed && !this.played && this.options.rotatable) {
+    if (isNumber(degree) && this.viewed && this.options.rotatable) {
       imageData.rotate = degree;
       this.renderImage();
     }
@@ -592,7 +587,7 @@ export default {
     scaleX = Number(scaleX);
     scaleY = Number(scaleY);
 
-    if (this.viewed && !this.played && this.options.scalable) {
+    if (this.viewed && this.options.scalable) {
       let changed = false;
 
       if (isNumber(scaleX)) {
@@ -613,91 +608,6 @@ export default {
     return this;
   },
 
-  /**
-   * Play the images
-   * @param {boolean} [fullscreen=false] - Indicate if request fullscreen or not.
-   * @returns {Viewer} this
-   */
-  play(fullscreen = false) {
-    if (!this.isShown || this.played) {
-      return this;
-    }
-
-    const { options, player } = this;
-    const onLoad = this.loadImage.bind(this);
-    const list = [];
-    let total = 0;
-    let index = 0;
-
-    this.played = true;
-    this.onLoadWhenPlay = onLoad;
-
-    if (fullscreen) {
-      this.requestFullscreen();
-    }
-
-    addClass(player, CLASS_SHOW);
-    forEach(this.items, (item, i) => {
-      const img = item.querySelector('img');
-      const image = document.createElement('img');
-
-      image.src = getData(img, 'originalUrl');
-      image.alt = img.getAttribute('alt');
-      total += 1;
-      addClass(image, CLASS_FADE);
-      toggleClass(image, CLASS_TRANSITION, options.transition);
-
-      if (hasClass(item, CLASS_ACTIVE)) {
-        addClass(image, CLASS_IN);
-        index = i;
-      }
-
-      list.push(image);
-      addListener(image, EVENT_LOAD, onLoad, {
-        once: true,
-      });
-      player.appendChild(image);
-    });
-
-    if (isNumber(options.interval) && options.interval > 0) {
-      const play = () => {
-        this.playing = setTimeout(() => {
-          removeClass(list[index], CLASS_IN);
-          index += 1;
-          index = index < total ? index : 0;
-          addClass(list[index], CLASS_IN);
-          play();
-        }, options.interval);
-      };
-
-      if (total > 1) {
-        play();
-      }
-    }
-
-    return this;
-  },
-
-  // Stop play
-  stop() {
-    if (!this.played) {
-      return this;
-    }
-
-    const { player } = this;
-
-    this.played = false;
-    clearTimeout(this.playing);
-    forEach(player.getElementsByTagName('img'), (image) => {
-      removeListener(image, EVENT_LOAD, this.onLoadWhenPlay);
-    });
-    removeClass(player, CLASS_SHOW);
-    player.innerHTML = '';
-    this.exitFullscreen();
-
-    return this;
-  },
-
   // Enter modal mode (only available in inline mode)
   full() {
     const {
@@ -707,7 +617,7 @@ export default {
       list,
     } = this;
 
-    if (!this.isShown || this.played || this.fulled || !options.inline) {
+    if (!this.isShown || this.fulled || !options.inline) {
       return this;
     }
 
@@ -758,7 +668,7 @@ export default {
       list,
     } = this;
 
-    if (!this.isShown || this.played || !this.fulled || !options.inline) {
+    if (!this.isShown || !this.fulled || !options.inline) {
       return this;
     }
 
@@ -803,7 +713,7 @@ export default {
   tooltip() {
     const { options, tooltipBox, imageData } = this;
 
-    if (!this.viewed || this.played || !options.tooltip) {
+    if (!this.viewed || !options.tooltip) {
       return this;
     }
 
@@ -872,7 +782,7 @@ export default {
 
   // Reset the image to its initial state
   reset() {
-    if (this.viewed && !this.played) {
+    if (this.viewed) {
       this.imageData = assign({}, this.initialImageData);
       this.renderImage();
     }
@@ -969,9 +879,6 @@ export default {
     this.destroyed = true;
 
     if (this.ready) {
-      if (this.played) {
-        this.stop();
-      }
 
       if (options.inline) {
         if (this.fulled) {

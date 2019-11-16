@@ -43,9 +43,7 @@ export default {
 
     switch (action) {
       case 'mix':
-        if (this.played) {
-          this.stop();
-        } else if (options.inline) {
+        if (options.inline) {
           if (this.fulled) {
             this.exit();
           } else {
@@ -84,11 +82,6 @@ export default {
       case 'prev':
         this.prev(options.loop);
         break;
-
-      case 'play':
-        this.play(options.fullscreen);
-        break;
-
       case 'next':
         this.next(options.loop);
         break;
@@ -115,9 +108,7 @@ export default {
         this.download(this.images[this.index]);
         break;
       default:
-        if (this.played) {
-          this.stop();
-        }
+        break;
     }
   },
 
@@ -230,26 +221,8 @@ export default {
     switch (event.keyCode || event.which || event.charCode) {
       // Escape
       case 27:
-        if (this.played) {
-          this.stop();
-        } else if (options.inline) {
-          if (this.fulled) {
-            this.exit();
-          }
-        } else {
-          this.hide();
-        }
-
+        this.hide();
         break;
-
-      // Space
-      case 32:
-        if (this.played) {
-          this.stop();
-        }
-
-        break;
-
       // ArrowLeft
       case 37:
         this.prev(options.loop);
@@ -455,24 +428,6 @@ export default {
       });
     }
 
-    if (this.played) {
-      if (this.options.fullscreen && this.fulled && !(
-        document.fullscreenElement
-        || document.webkitFullscreenElement
-        || document.mozFullScreenElement
-        || document.msFullscreenElement
-      )) {
-        this.stop();
-        return;
-      }
-
-      forEach(this.player.getElementsByTagName('img'), (image) => {
-        addListener(image, EVENT_LOAD, this.loadImage.bind(this), {
-          once: true,
-        });
-        dispatchEvent(image, EVENT_LOAD);
-      });
-    }
   },
 
   wheel(event) {
