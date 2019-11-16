@@ -24,10 +24,9 @@ export default {
   },
   mounted() {
     const element = this.$refs.scope;
-    this._viewer = v.createViewer({ element, });
+    this._viewer = v.createViewer({ element });
   },
   destroyed() {
     v.destroyViewer(this._viewer.id);
-    this._DOMObserver.disconnect();
   },
 }
