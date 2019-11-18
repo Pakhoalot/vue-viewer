@@ -115,6 +115,9 @@ export default {
    * @returns {Viewer} this
    */
   hide(immediate = false) {
+
+    this.canNotWheel = true;
+
     const { element, options } = this;
 
     if (options.inline || this.hiding || !(this.isShown || this.showing)) {
@@ -141,7 +144,10 @@ export default {
     const { viewer } = this;
 
     if (options.transition && !immediate) {
-      const hidden = this.hidden.bind(this);
+      const hidden = (...args) => {
+        this.canNotWheel = false;
+        this.hidden.bind(this)(...args);
+      };
       const hide = () => {
         // XXX: It seems the `event.stopPropagation()` method does not work here
         setTimeout(() => {

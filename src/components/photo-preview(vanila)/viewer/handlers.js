@@ -430,7 +430,7 @@ export default {
   },
 
   wheel(event) {
-    if (!this.viewed) {
+    if (!this.viewed || this.canNotWheel) {
       return;
     }
 
