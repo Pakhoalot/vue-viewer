@@ -8,7 +8,6 @@ export default (
     + '</div>'
     + '<div class="'+NAMESPACE+'-tooltip"></div>'
     + '<div class="'+NAMESPACE+'-top-right-bar" >'
-    +   '<div role="button" class="'+NAMESPACE+'-button" data-'+NAMESPACE+'-action="mix"></div>'
     + '</div>'
     + '<div class="'+NAMESPACE+'-player"></div>'
   + '</div>'

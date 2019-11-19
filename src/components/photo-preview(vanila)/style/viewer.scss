@@ -9,10 +9,26 @@
     height: 100%;
     position: absolute;
     transition: all .2s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .viewer-svg {
+      width:16px;
+      height:16px;
+      fill: #fff;
+      opacity: 0;
+    }
+
   }
 
   &-image-mask:hover {
     background: rgba($color: #000000, $alpha: .5);
+    cursor: pointer;
+
+    .viewer-svg {
+      opacity: 1;
+    }
   }
   &-container {
     bottom: 0;
@@ -120,33 +136,16 @@
     }
   }
 
-  &-player {
-    background-color: #000;
-    bottom: 0;
-    cursor: none;
-    display: none;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    & > img {
-      left: 0;
-      position: absolute;
-      top: 0;
-    }
-  }
 
   &-toolbar {
     height: 46px;
-    width: 271px;
-    background:#2A2A2A;
-    opacity:0.5;
+    width: 366px;
+    background:rgba($color: #2A2A2A, $alpha: .5);
     border-radius:4px;
     margin: 0 auto;
 
     .button-group {
-      padding: 0 30px;
+      padding: 0 25px;
       display: flex;
       justify-content: space-between;
 
@@ -156,7 +155,7 @@
         .button {
           display: flex;
           width: 46px;
-          height: 46px;
+          height: 44px;
           cursor: pointer;
           text-align: center;
           align-items: center;
@@ -165,30 +164,34 @@
             width: 23px;
             height: 23px;
             fill: #fff;
-            stroke: #fff;
+            // stroke: #fff;
           }
           &.active,
           &:hover {
             background: #3B3B3B;
-            
+            border-bottom: #5874D8 2px solid;
           }
 
-        &.disabled {
-          cursor: default;
-          &:hover {
-            background: none;
+          &.disabled {
+            cursor: default;
+            &:hover {
+              background: none;
+              border-bottom: none;
+            }
+            .viewer-svg {
+              width: 23px;
+              height: 23px;
+              fill: #8E8E8E;
+              // stroke: #8E8E8E;
+              
+            }
           }
-          .viewer-svg {
-            width: 23px;
-            height: 23px;
-            fill: #8E8E8E;
-            stroke: #8E8E8E;
-            
-          }
-        }
-        }
-
-        
+        }  
+      }
+      .divider {
+        border-right: 1px #666666 solid;
+        margin: 9px 0px;
+        border-radius:1px;
       }
 
     }
@@ -212,10 +215,25 @@
     }
   }
 
+  &-view-original {
+    padding-left: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    color: #FEFEFE;
+    height: 44px;
+    margin-top: 1px;
+    cursor: pointer;
+
+    &:hover {
+      color: #5874D8;
+    };
+  }
   &-tooltip {
     background-color: rgba(68,68,68, 0.6);
     border-radius: 16px;
-    color: rgba($color: #fff, $alpha: 0.6);
+    color: #fff;
     display: none;
     font-size: 20px;
     height: 30px;
@@ -251,22 +269,31 @@
     position: fixed;
     right: 33px;
     top: 33px;
-    
   }
-  &-button {
-    display: inline-block;
-    width: 44px;
-    height: 44px;
-  }
+
+
 
   &-close {
     width: 44px;
     height: 44px;
     border-radius: 22px;
-    background: #000;
+    background: rgba($color: #000000, $alpha: .2);
     border: white 1px solid;
-    opacity:0.2;
     border-radius:50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .1s ease-in;
+    .viewer-svg {
+      height: 17px;
+      width: 17px;
+      fill: #fff;
+    }
+
+    &:hover {
+      background: rgba($color: #000000, $alpha: 0.4);
+    }
   }
   
 

@@ -16,15 +16,21 @@ class ViewerManager {
    * 创建一个viewer并返回
    *
    * @param {Object} [options] {
-   *     element: null,
-   *     container: document.body,
-   *   }
+   *    element: null,
+   *    container: document.body,
+   *    zIndex: 99,
+   *    windowContext: window
+   *    mask: true,
+   *  }
    * @returns {Object} viewer示例
    * @memberof ViewerManager
    */
   createViewer(options = {
     element: null,
     container: document.body,
+    zIndex: 99,
+    windowContext: window,
+    mask: true,
   }) {
     const viewer = this.create(options);
     this.idViewerMap.set(viewer.id, viewer);
@@ -33,18 +39,23 @@ class ViewerManager {
   }
   create(options) {
     const element = options.element;
+    const windowContext = options.windowContext || window;
     const zIndex = options.zIndex || 99;
     if(!element) throw Error('element must given');
     const viewer = new Viewer(element, {
       container: options.container || document.body,
+      windowContext,
       button: true,
       navbar: false,
       title: false,
       toolbar: {
         prev: true,
         next: true,
-        toggleZoom: true,
+        // toggleZoom: true,
+        zoomFit: true,
         download: true,
+        divider: true,
+        viewOriginal: true,
       },
       loop: false,
       tooltip: true,
@@ -52,6 +63,7 @@ class ViewerManager {
       backdrop: true,
       minZoomRatio: 0.25,
       maxZoomRatio: 4,
+      mask: options.mask,
       ...event
     });
     viewer.id = this.idManger ++;
@@ -84,6 +96,8 @@ class ViewerManager {
     viewer = this.create(options);
     this.idViewerMap.set(viewer.id, viewer);
     this.viewers.push(viewer);
+    if(typeof id == 'object') Object.assign(id, viewer);
+    return viewer;
   }
   /**
    * 以异步形式初始化对应viewer

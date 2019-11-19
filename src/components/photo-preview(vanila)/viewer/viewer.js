@@ -40,6 +40,7 @@ import {
   setStyle,
   toggleClass,
   buildButton,
+  buildMask,
 } from './utilities';
 
 const AnotherViewer = WINDOW.Viewer;
@@ -79,6 +80,7 @@ class Viewer {
     this.wheeling = false;
     this.zooming = false;
     this.zoomMode = 'fit'; //fit为适应界面, origin 为原始大小
+    this.windowContext = window;
     this.init();
   }
 
@@ -98,9 +100,11 @@ class Viewer {
       const imageParent = image.parentNode;
       const imageWrapper = document.createElement('div');
       addClass(imageWrapper, `${NAMESPACE}-image-wrapper`);
-      const mask = document.createElement('div');
-      addClass(mask, `${NAMESPACE}-image-mask`);
-      imageWrapper.appendChild(mask);
+      
+      if(options.mask) {
+        const mask = buildMask();
+        imageWrapper.appendChild(mask);
+      }
       imageWrapper.appendChild(image);
       imageParent.appendChild(imageWrapper);
       addClass(image, `${NAMESPACE}-image`);
@@ -121,10 +125,11 @@ class Viewer {
     this.length = images.length;
     this.images = images;
 
-    const { ownerDocument } = element;
+    const { ownerDocument } = options.container || element;
     const body = ownerDocument.body || ownerDocument.documentElement;
 
     this.body = body;
+    this.windowContext = options.windowContext || window;
     this.scrollbarWidth = window.innerWidth - ownerDocument.documentElement.clientWidth;
     this.initialBodyPaddingRight = window.getComputedStyle(body).paddingRight;
 
@@ -178,7 +183,7 @@ class Viewer {
     } else {
       addListener(element, EVENT_CLICK, (this.onStart = ({ target }) => {
         const image = target.nextSibling;
-        if (hasClass(image, `${NAMESPACE}-image`)
+        if (image && image.tagName == 'IMG' && hasClass(image, `${NAMESPACE}-image`)
           && (!isFunction(options.filter) || options.filter.call(this, image))) {
           this.view(this.images.indexOf(image));
         }
@@ -201,14 +206,12 @@ class Viewer {
     const viewer = template.querySelector(`.${NAMESPACE}-container`);
     const title = viewer.querySelector(`.${NAMESPACE}-title`);
     const toolbar = viewer.querySelector(`.${NAMESPACE}-toolbar`);
-    const button = viewer.querySelector(`.${NAMESPACE}-button`);
     const canvas = viewer.querySelector(`.${NAMESPACE}-canvas`);
     const topRight = viewer.querySelector(`.${NAMESPACE}-top-right-bar`)
     this.parent = parent;
     this.viewer = viewer;
     this.title = title;
     this.toolbar = toolbar;
-    this.button = button;
     this.canvas = canvas;
     this.footer = viewer.querySelector(`.${NAMESPACE}-footer`);
     this.tooltipBox = viewer.querySelector(`.${NAMESPACE}-tooltip`);
@@ -218,6 +221,16 @@ class Viewer {
       ? options.title[0]
       : options.title));
     toggleClass(topRight, CLASS_HIDE, !options.button);
+    
+    let button;
+    if(options.button) {
+      button = document.createElement('div');
+      this.button = button;
+      const buttonWrapper = buildButton(button, 'close');
+      setData(button, DATA_ACTION, 'mix');
+      
+      topRight.appendChild(buttonWrapper);
+    }
 
     if (options.backdrop) {
       addClass(viewer, `${NAMESPACE}-backdrop`);
@@ -262,7 +275,10 @@ class Viewer {
 
         const size = deep && !isUndefined(value.size) ? value.size : value;
         const click = deep && !isUndefined(value.click) ? value.click : value;
-        const item = document.createElement('div');
+        let item;
+        if(name == 'view-original') item = document.createElement('a');
+        else item = document.createElement('div');
+        
         this[`${name}-btn`] = item;
         const itemWrapper = buildButton(item, name, NAMESPACE);
         
@@ -282,6 +298,8 @@ class Viewer {
         } else if (name === 'toggle-zoom') {
           addClass(item, `${NAMESPACE}-${this.zoomMode}`);
           this.toggleZoomButton = item;
+        } else if (name === 'zoom-fit') {
+          this.zoomFitButton = item;
         }
 
         if (isFunction(click)) {

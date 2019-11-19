@@ -29,9 +29,10 @@ export default {
   },
 
   initContainer() {
+    const windowContext = this.windowContext || window;
     this.containerData = {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: windowContext.innerWidth,
+      height: windowContext.innerHeight,
     };
   },
 
@@ -64,7 +65,7 @@ export default {
 
   initImage(done) {
     const { options, image, viewerData } = this;
-    const footerHeight = this.footer.offsetHeight;
+    const footerHeight = this.footer.offsetHeight - this.footer.offsetHeight;
     const viewerWidth = viewerData.width;
     const viewerHeight = Math.max(viewerData.height - footerHeight, footerHeight);
     const oldImageData = this.imageData || {};

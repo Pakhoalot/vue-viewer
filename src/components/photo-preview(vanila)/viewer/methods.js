@@ -362,7 +362,6 @@ export default {
    */
   move(offsetX, offsetY) {
     const { imageData } = this;
-
     this.moveTo(
       isUndefined(offsetX) ? offsetX : imageData.left + Number(offsetX),
       isUndefined(offsetY) ? offsetY : imageData.top + Number(offsetY),
@@ -488,7 +487,7 @@ export default {
       this.zooming = true;
 
       if (_originalEvent) {
-        const offset = getOffset(this.viewer);
+        const offset = getOffset(this.viewer, this.windowContext);
         const center = pointers && Object.keys(pointers).length ? getPointersCenter(pointers) : {
           pageX: _originalEvent.pageX,
           pageY: _originalEvent.pageY,
@@ -784,6 +783,13 @@ export default {
     return this;
   },
 
+  zoomFit() {
+    if(this.imageData.ratio !== 1) {
+      this.zoomTo(this.initialImageData.ratio, true);
+    }
+    return this;
+  },
+
   // Reset the image to its initial state
   reset() {
     if (this.viewed) {
@@ -915,5 +921,8 @@ export default {
     const next = this['next-btn'];
     this.index <= 0 ? addClass(prev, 'disabled') : removeClass(prev, 'disabled');
     this.index >= this.length - 1 ? addClass(next, 'disabled') : removeClass(next, 'disabled');
+    if(this['view-original-btn']) {
+      this['view-original-btn'].href = this.images[this.index].src;
+    }
   }
 };

@@ -192,6 +192,12 @@ export default {
    * @type {string | Function}
    */
   url: 'src',
+  
+  /**
+   * Define where to get the original image URL for viewing.
+   * @type {string | Function}
+   */
+  mask: true,
 
   /**
    * Event shortcuts.

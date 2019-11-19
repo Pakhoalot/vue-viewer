@@ -456,12 +456,11 @@ export function dispatchEvent(element, type, data) {
  * @param {Element} element - The target element.
  * @returns {Object} The offset data.
  */
-export function getOffset(element) {
+export function getOffset(element, windowContext = window) {
   const box = element.getBoundingClientRect();
-
   return {
-    left: box.left + (window.pageXOffset - document.documentElement.clientLeft),
-    top: box.top + (window.pageYOffset - document.documentElement.clientTop),
+    left: box.left + (windowContext.pageXOffset - document.documentElement.clientLeft),
+    top: box.top + (windowContext.pageYOffset - document.documentElement.clientTop),
   };
 }
 
@@ -676,8 +675,26 @@ export function createSvg(id) {
   return svg;
 }
 
+export function buildMask() {
+  const mask = document.createElement('div');
+  addClass(mask, `${NAMESPACE}-image-mask`);
+  const svg = createSvg('#icon_magnifier');
+  mask.appendChild(svg);
+  mask.setAttribute('title', '点击查看原图');
+  return mask;
+}
+function buildDivider(item) {
+  let itemWrapper = document.createElement('div');
+  addClass(itemWrapper, 'divider');
+  itemWrapper.appendChild(item);
+  return itemWrapper;
+}
+
 export function buildButton(item, name) {
-  const itemWrapper = document.createElement('div');
+  
+  if(name == 'divider') return buildDivider(item);
+  
+  let itemWrapper = document.createElement('div');
   addClass(itemWrapper, `button-wrapper`)
   item.setAttribute('role', 'button');
   addClass(item, `button`);
@@ -696,10 +713,23 @@ export function buildButton(item, name) {
       svg && item.appendChild(svg);
       svg = createSvg('#icon_togglezoom2');
       break;
+    case 'zoom-fit':
+      svg = createSvg('#icon_togglezoom1');
+      item.setAttribute('title', '适应窗口')
+      break;
     case 'download':
+      item.download = 'img.png';
       svg = createSvg('#icon_download');
       break;
-    default: 
+    case 'close':
+      svg = createSvg('#icon_close');
+      break;
+    case 'view-original': 
+      removeClass(item, 'button');
+      item.setAttribute('target', '_blank');
+      item.innerHTML = '查看原图';
+      break;
+    default:
       break;
   }
   svg && item.appendChild(svg);
@@ -707,4 +737,36 @@ export function buildButton(item, name) {
   itemWrapper.appendChild(item);
 
   return itemWrapper;
+}
+
+function downloadPolyfill (href, name) {
+  let eleLink = document.createElement('a')
+  eleLink.download = name
+  eleLink.href = href
+  eleLink.click()
+  eleLink.remove()
+}
+
+export function download(url, name) {
+  if(fetch) {
+    fetch(url)
+      .then(res => res.blob())
+      .then(blob => {
+          // 通过 blob 对象获取对应的 url
+          const url = URL.createObjectURL(blob)
+  
+          let a = document.createElement('a')
+          a.download = name;
+          a.href = url
+          document.body.appendChild(a)
+          a.click();
+          a.remove(); // document.body.removeChild(a)
+      })
+      .catch(err => {
+          console.error(err)
+      })
+  } else {
+    //polyfill
+    downloadPolyfill(url, name);
+  }
 }

@@ -28,6 +28,9 @@ import {
   removeClass,
   setStyle,
   toggleClass,
+  downloadByBlob,
+  downloadByData,
+  download,
 } from './utilities';
 
 export default {
@@ -103,6 +106,9 @@ export default {
         break;
       case 'toggle-zoom':
         this.toggle();
+        break;
+      case 'zoom-fit':
+        this.reset();
         break;
       case 'download':
         this.download(this.images[this.index]);
@@ -278,7 +284,6 @@ export default {
   pointerdown(event) {
     const { options, pointers } = this;
     const { buttons, button } = event;
-
     if (
       !this.viewed
       || this.showing
@@ -329,7 +334,6 @@ export default {
 
   pointermove(event) {
     const { pointers, action } = this;
-
     if (!this.viewed || !action) {
       return;
     }
@@ -467,11 +471,6 @@ export default {
    * @returns
    */
   download(image) {
-    if(!image || !image.src) return;
-    const src = image.src;
-    const a = document.createElement('a');
-    a.href = src;
-    a.download = "";
-    a.click();
+    download(image.src, image.src.split('/').splice(-1)[0]);
   }
 };
