@@ -8,6 +8,7 @@ import {
   NAMESPACE,
 } from './constants';
 
+
 /**
  * Check if the given value is a string.
  * @param {*} value - The value to check.
@@ -669,7 +670,7 @@ export function getPointersCenter(pointers) {
 export function createSvg(id) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-  addClass(svg, `${NAMESPACE}-svg`);
+  svg.setAttribute('class', `${NAMESPACE}-svg`);
   use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', id);
   svg.appendChild(use);
   return svg;
