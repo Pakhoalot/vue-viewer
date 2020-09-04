@@ -11,7 +11,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "create-banner": "^1.0.0",
     "css-loader": "^3.1.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "rollup": "^1.27.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-vue": "^5.1.2",
